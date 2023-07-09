@@ -68,7 +68,4 @@ PCHAR dns_query_to_buffer(PDNS_PACKET packet, PDWORD buffer_size);
 /* prints DNS_PACKET to stdout */
 VOID dns_packet_print(PDNS_PACKET packet);
 
-/* main function of program: resolves domain name to IP address and the other way around */
-PCHAR dns_resolve(PCHAR domain);
-
 #endif // !_DNS_PACKET_H

@@ -29,6 +29,7 @@ target_link_libraries (net misc)
 add_library(
     dns
     src/dns/dns.h
+    src/dns/dns.c
     src/dns/packet.h
     src/dns/packet.c
 )

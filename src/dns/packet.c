@@ -20,6 +20,7 @@ PDNS_PACKET dns_query_create(PCHAR domain, WORD type, WORD dclass)
     packet->header.arcount = 0x0000;
 
     packet->question.qname = dns_format(domain);
+    // 0x0001 is encoded as 0x0100, to reverse it use ntohs
     packet->question.qtype = htons(type);
     packet->question.qclass = htons(dclass);
     // to reverse htons, use ntohs
@@ -114,7 +115,7 @@ PCHAR *read_answers(PDNS_PACKET response)
 // where buffer size if out parameter
 PCHAR dns_query_to_buffer(PDNS_PACKET packet, PDWORD buffer_size)
 {
-    *buffer_size = sizeof(struct _dns_header) + strlen(packet->question.qname) + sizeof(WORD) * 2;
+    *buffer_size = sizeof(struct _dns_header) + strlen(packet->question.qname) + sizeof(WORD) * 2 + 1;
 
     PCHAR buffer = (PCHAR)malloc(*buffer_size);
     
@@ -126,8 +127,11 @@ PCHAR dns_query_to_buffer(PDNS_PACKET packet, PDWORD buffer_size)
 
     memcpy(buffer, &packet->header, sizeof(struct _dns_header));
     memcpy(buffer + sizeof(struct _dns_header), packet->question.qname, strlen(packet->question.qname));
-    memcpy(buffer + sizeof(struct _dns_header) + strlen(packet->question.qname), &packet->question.qtype, sizeof(WORD));
-    memcpy(buffer + sizeof(struct _dns_header) + strlen(packet->question.qname) + sizeof(WORD), &packet->question.qclass, sizeof(WORD));
+    // null termainator:
+    buffer[sizeof(struct _dns_header) + strlen(packet->question.qname)] = 0;
+
+    memcpy(buffer + sizeof(struct _dns_header) + strlen(packet->question.qname) + 1, &packet->question.qtype, sizeof(WORD));
+    memcpy(buffer + sizeof(struct _dns_header) + strlen(packet->question.qname) + sizeof(WORD) + 1, &packet->question.qclass, sizeof(WORD));
 
     return buffer;
 }
