@@ -5,7 +5,5 @@
 #include "../net/net.h"
 
 #include "packet.h"
-#include "serializer.h"
-#include "deserializer.h"
 
 #endif // !_DNS_H

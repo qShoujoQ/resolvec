@@ -3,6 +3,8 @@
 
 #include "../misc/misc.h"
 
+#define DNS_MAX_NAME_LEN 256
+
 union _dns_flags {
     struct {
         WORD qr : 1;
@@ -58,8 +60,13 @@ PDNS_PACKET dns_response_from_buffer(PCHAR buffer, DWORD buffer_size);
 VOID dns_packet_free(PDNS_PACKET packet);
 
 /* returns ANCOUNT answers from the response */
-PCHAR read_answers(PDNS_PACKET response);
+PCHAR *read_answers(PDNS_PACKET response);
+
+PCHAR dns_query_to_buffer(PDNS_PACKET packet, PDWORD buffer_size);
 
 VOID dns_packet_print(PDNS_PACKET packet);
+
+/* main function of program: resolves domain name to IP address and the other way around */
+PCHAR dns_resolve(PCHAR domain);
 
 #endif // !_DNS_PACKET_H

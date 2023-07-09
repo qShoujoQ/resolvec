@@ -47,3 +47,5 @@ add_executable (
 target_link_libraries (${PROJECT_NAME} misc)
 target_link_libraries (${PROJECT_NAME} net)
 target_link_libraries (${PROJECT_NAME} dns)
+
+target_link_libraries (${PROJECT_NAME} ws2_32)

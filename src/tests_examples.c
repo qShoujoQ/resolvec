@@ -14,9 +14,17 @@ int main() {
     DBG_readable_x(dns_domain);
     DBG_readable_x(reverse_ip);
 
-    PDNS_PACKET packet = dns_query_create(domain, 1, 1);
+    PDNS_PACKET packet = dns_query_create(ip, 1, 1);
     dns_packet_print(packet);
 
+    PDWORD bytes_size = (PDWORD)malloc(sizeof(DWORD));
+    PCHAR dns_bytes = dns_query_to_buffer(packet, bytes_size);
+    printf("dns_bytes size: %d\n", *bytes_size);
+    DBG_bytes(dns_bytes, *bytes_size);
+
     dns_packet_free(packet);
+    free(bytes_size);
+    free(dns_bytes);
+
     return 0;
 }
